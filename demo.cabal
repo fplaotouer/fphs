@@ -1,0 +1,62 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 5f5d740e46891ef891c7f597dff14de2d70c01a4882686e7140c10d5d4ee289e
+
+name:           demo
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/fplaotouer/fphs#readme>
+homepage:       https://github.com/fplaotouer/fphs#readme
+bug-reports:    https://github.com/fplaotouer/fphs/issues
+author:         pangz
+maintainer:     fpxiaopangza@163.com
+copyright:      Copyright (c) 2020-2021 Pangz
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/fplaotouer/fphs
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_demo
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable demo
+  main-is: Main.hs
+  other-modules:
+      Paths_demo
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , demo
+  default-language: Haskell2010
+
+test-suite demo-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_demo
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , demo
+  default-language: Haskell2010
