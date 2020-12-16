@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5f5d740e46891ef891c7f597dff14de2d70c01a4882686e7140c10d5d4ee289e
+-- hash: f49ad44e77e1bedc29ac81653521be19eca121a3ae75c36a4c967dd5863a6f47
 
 name:           demo
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Mutex
   other-modules:
       Paths_demo
   hs-source-dirs:
