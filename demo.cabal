@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f49ad44e77e1bedc29ac81653521be19eca121a3ae75c36a4c967dd5863a6f47
+-- hash: f86493508027faf6d97116b9bddb16a16b304eca10b19c9dd63a2256906262fb
 
 name:           demo
 version:        0.1.0.0
@@ -35,6 +35,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , split
   default-language: Haskell2010
 
 executable demo
@@ -47,6 +48,7 @@ executable demo
   build-depends:
       base >=4.7 && <5
     , demo
+    , split
   default-language: Haskell2010
 
 test-suite demo-test
@@ -60,4 +62,5 @@ test-suite demo-test
   build-depends:
       base >=4.7 && <5
     , demo
+    , split
   default-language: Haskell2010

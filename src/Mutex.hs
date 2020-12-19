@@ -1,4 +1,9 @@
-module Mutex where
+module Mutex
+    ( Mutex
+    , newMutex
+    , lock
+    , unLock
+    ) where
 
 import Control.Concurrent.MVar (MVar, newMVar, takeMVar, putMVar)
 

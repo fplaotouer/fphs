@@ -1,38 +1,28 @@
 module Lib
-    ( runDemo
+    ( mySum
     ) where
 
 import Mutex
 
-import System.IO
-import Control.Concurrent
-import Data.Maybe
-import Data.List
+import Control.Concurrent (forkIO, myThreadId)
+import Control.Concurrent.Chan (Chan, newChan, readChan, writeChan, getChanContents)
+import Control.Monad (forM_)
 
-getChanWhileJust :: Chan (Maybe a) -> IO [a]
--- getChanWhileJust chan = fmap (catMaybes . takeWhile isJust) (getChanContents chan)
-getChanWhileJust chan = fmap (catMaybes . take 11) (getChanContents chan)
-
-runDemo :: IO ()
-runDemo = do
+mySum :: (Show a, Num a) => [[a]] -> IO ()
+mySum inputs = do
+  let len = length inputs
   mutex <- newMutex
-  res <- newChan
-  calc [1..100] res mutex
-  getChanWhileJust res >>= putStrLn . show . sum
+  pSums <- newChan
+  -- mapM_ (forkIO . sumThisPart mutex pSums) inputs
+  forM_ inputs $ forkIO . sumThisPart mutex pSums
+  result <- sum . take len <$> getChanContents pSums
+  putStrLn $ "The sum is: " ++ show result
 
-sumUp :: (Show a, Num a) => MVar [a] -> Chan (Maybe a) -> Mutex -> IO ()
-sumUp input res mutex = do
-  lst <- takeMVar input
+sumThisPart :: (Show a, Num a) => Mutex -> Chan a -> [a] -> IO ()
+sumThisPart mutex res nums = do
   lock mutex
   tid <- myThreadId
-  putStrLn $ show tid ++ ":\t" ++ show lst
+  putStrLn $ show tid ++ ":\t" ++ show nums
   unLock mutex
-  writeChan res $ Just $ sum lst
+  writeChan res $! sum nums
 
-calc :: (Show a, Num a) => [a] -> Chan (Maybe a) -> Mutex -> IO ()
-calc [] res _ = writeChan res Nothing
-calc xs res mutex = do
-  buf <- newEmptyMVar
-  putMVar buf . take 10 $ xs
-  forkIO $ sumUp buf res mutex
-  calc (drop 10 $ xs) res mutex
