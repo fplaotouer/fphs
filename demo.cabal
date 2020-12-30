@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f86493508027faf6d97116b9bddb16a16b304eca10b19c9dd63a2256906262fb
+-- hash: 00d06687a79c767545f7072a0d8d9cae470a157b6e947d84c62c4648da418d26
 
 name:           demo
 version:        0.1.0.0
@@ -44,7 +44,7 @@ executable demo
       Paths_demo
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , demo
@@ -58,7 +58,7 @@ test-suite demo-test
       Paths_demo
   hs-source-dirs:
       test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , demo

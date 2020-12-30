@@ -7,6 +7,7 @@ module Mutex
 
 import Control.Concurrent.MVar (MVar, newMVar, takeMVar, putMVar)
 
+
 type Mutex = MVar ()
 
 newMutex :: IO Mutex
