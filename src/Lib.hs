@@ -2,28 +2,29 @@ module Lib
     ( mySum
     ) where
 
-import Control.Concurrent (forkIO, myThreadId)
-import Control.Concurrent.Chan (Chan, newChan, readChan, writeChan, getChanContents)
-import Control.Monad (forM_)
+import Control.Concurrent (forkIO)
+import Data.List.Split (chunksOf)
 
-import qualified Mutex as M
+import qualified Control.Concurrent.STM as S
 
 
-mySum :: (Show a, Num a) => [[a]] -> IO ()
-mySum inputs = do
-    let len = length inputs
-    mutex <- M.newMutex
-    pSums <- newChan
-    -- mapM_ (forkIO . sumThisPart mutex pSums) inputs
-    forM_ inputs $ forkIO . sumThisPart mutex pSums
-    result <- sum . take len <$> getChanContents pSums
-    putStrLn $ "The sum is: " ++ show result
+type Result = S.TVar (Int, Int)
 
-sumThisPart :: (Show a, Num a) => M.Mutex -> Chan a -> [a] -> IO ()
-sumThisPart mutex res nums = do
-    M.lock mutex
-    tid <- myThreadId
-    putStrLn $ show tid ++ ":\t" ++ show nums
-    M.unLock mutex
-    writeChan res $! sum nums
+mySum :: Int -> Int -> Int -> IO ()
+mySum lower upper chunkSize = do
+    let chunks = chunksOf chunkSize [lower..upper]
+    let total = length chunks
+    result <- S.atomically $ S.newTVar (0, 0)
+    mapM_ (\chunk -> forkIO $ S.atomically $ addToResult result chunk) chunks
+    value <- S.atomically $ getResult result total
+    putStrLn $ "The result is " ++ show value
 
+addToResult :: Result -> [Int] -> S.STM ()
+addToResult result chunk = do
+    (value, finished) <- S.readTVar result
+    S.writeTVar result (value + sum chunk, finished + 1)
+
+getResult :: Result -> Int -> S.STM Int
+getResult result total = do
+    (value, finished) <- S.readTVar result
+    if finished < total then S.retry else return value

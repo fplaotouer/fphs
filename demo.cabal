@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 00d06687a79c767545f7072a0d8d9cae470a157b6e947d84c62c4648da418d26
+-- hash: fa53f90cf790a7a9a6f7f3887b9f8c03a9e161fe4db3ef30971aa82920f49dc4
 
 name:           demo
 version:        0.1.0.0
@@ -28,7 +28,6 @@ source-repository head
 library
   exposed-modules:
       Lib
-      Mutex
   other-modules:
       Paths_demo
   hs-source-dirs:
@@ -36,6 +35,7 @@ library
   build-depends:
       base >=4.7 && <5
     , split
+    , stm
   default-language: Haskell2010
 
 executable demo
@@ -49,6 +49,7 @@ executable demo
       base >=4.7 && <5
     , demo
     , split
+    , stm
   default-language: Haskell2010
 
 test-suite demo-test
@@ -63,4 +64,5 @@ test-suite demo-test
       base >=4.7 && <5
     , demo
     , split
+    , stm
   default-language: Haskell2010
