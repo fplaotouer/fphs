@@ -21,8 +21,7 @@ mySum lower upper chunkSize = do
 
 addToResult :: Result -> [Int] -> S.STM ()
 addToResult result chunk = do
-    (value, finished) <- S.readTVar result
-    S.writeTVar result (value + sum chunk, finished + 1)
+    S.modifyTVar result (\(value, finished) -> (value + sum chunk, finished + 1))
 
 getResult :: Result -> Int -> S.STM Int
 getResult result total = do
